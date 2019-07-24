@@ -4,6 +4,11 @@ RSpec.describe User, type: :model do
   let(:user) { build(:user) }
 
   context 'Validations' do
+    it 'required email' do
+      user.email = nil
+      expect(user).to_not be_valid
+      expect(user.errors.messages[:email]).to be_present
+    end
     it 'is invalid email' do
       user.email = 'not email'
       expect(user).to_not be_valid
