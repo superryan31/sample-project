@@ -8,14 +8,11 @@ module.exports = {
     parser: 'babel-eslint'
   },
   extends: [
-    'prettier',
-    'prettier/vue',
-    'plugin:prettier/recommended',
-    '@nuxtjs',
-    'plugin:nuxt/recommended'
+    'plugin:vue/essential'
   ],
   plugins: [
-    'prettier'
+    'prettier',
+    'vue'
   ],
   // add your custom rules here
   rules: {

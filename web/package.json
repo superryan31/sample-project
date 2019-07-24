@@ -14,7 +14,14 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "@nuxtjs/style-resources": "^0.1.1",
+    "bootstrap-vue": "^2.0.0-rc.27",
+    "chart.js": "^2.7.1",
+    "flag-icon-css": "^2.9.0",
+    "font-awesome": "^4.7.0",
+    "simple-line-icons": "^2.4.1",
+    "vue-chartjs": "^3.1.1"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
@@ -32,6 +39,8 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "prettier": "^1.16.4",
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.9",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6"
   }
 }

@@ -17,13 +17,36 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
+   ** Set the link active classes
+   */
+  router: {
+    linkActiveClass: 'active open'
+  },
+  /*
    ** Customize the progress-bar color
    */
   loading: { color: '#fff' },
   /*
    ** Global CSS
    */
-  css: [],
+  css: [
+    /* Import Font Awesome Icons Set */
+    '~/node_modules/flag-icon-css/css/flag-icon.min.css',
+    /* Import Font Awesome Icons Set */
+    '~/node_modules/font-awesome/css/font-awesome.min.css',
+    /* Import Simple Line Icons Set */
+    '~/node_modules/simple-line-icons/css/simple-line-icons.css',
+    /* Import Bootstrap Vue Styles */
+    '~/node_modules/bootstrap-vue/dist/bootstrap-vue.css',
+    /* Import Core SCSS */
+    { src: '~/assets/scss/style.scss', lang: 'scss' }
+  ],
+  /*
+   ** Style resources configuration
+   */
+  styleResources: {
+    scss: './assets/scss/style.scss'
+  },
   /*
    ** Plugins to load before mounting the App
    */
@@ -34,11 +57,11 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    'bootstrap-vue/nuxt'
   ],
   /*
    ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
    */
   axios: {},
   /*
