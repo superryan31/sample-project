@@ -17,12 +17,12 @@ $ docker-compose run --rm backend bin/rails db:migrate:reset
 
 ## Seed
 ```
-$ docker-compose run --rm web bin/rails db:seed
+$ docker-compose run --rm backend bin/rails db:seed
 ```
 
 ## How to bundle install
 ```
-$ docker-compose run --rm web bundle install
+$ docker-compose run --rm backend bundle install
 ```
 
 ## How to run app
@@ -32,5 +32,5 @@ $ docker-compose up
 
 ## How to run rspec
 ```
-$ docker-compose run --rm web bin/rspec
+$ docker-compose run --rm backend bin/rspec
 ```
