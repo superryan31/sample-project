@@ -50,20 +50,43 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [
+    '~/plugins/axios',
+    '~/plugins/vee-validate.js'
+  ],
   /*
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/eslint-module',
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
+    'nuxt-validate'
   ],
   /*
    ** Axios module configuration
    */
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:8090'
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'users/sign_in', method: 'post', propertyName: 'token' },
+          user: { url: 'users/sign_in', method: 'get', propertyName: false },
+          logout: false
+        }
+      }
+    },
+  redirect: {
+    login: '/login',
+    logout: '/',
+    home: '/',
+  }
+  },
   /*
    ** Build configuration
    */

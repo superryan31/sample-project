@@ -8,17 +8,18 @@
               <b-card-body>
                 <h1>Login</h1>
                 <p class="text-muted">Sign In to your account</p>
+                <Notification :message="error" v-if="error"/>
                 <b-input-group class="mb-3">
                   <b-input-group-prepend><b-input-group-text><i class="icon-user"></i></b-input-group-text></b-input-group-prepend>
-                  <input type="text" class="form-control" placeholder="Username">
+                  <input type="text" class="form-control" placeholder="Email" v-model="user.email">
                 </b-input-group>
                 <b-input-group class="mb-4">
                   <b-input-group-prepend><b-input-group-text><i class="icon-lock"></i></b-input-group-text></b-input-group-prepend>
-                  <input type="password" class="form-control" placeholder="Password">
+                  <input type="password" class="form-control" placeholder="Password" v-model="user.password">
                 </b-input-group>
                 <b-row>
                   <b-col cols="6">
-                    <b-button variant="primary" class="px-4">Login</b-button>
+                    <b-button variant="primary" class="px-4" @click="login">Login</b-button>
                   </b-col>
                   <b-col cols="6" class="text-right">
                     <b-button variant="link" class="px-0">Forgot password?</b-button>
@@ -31,7 +32,7 @@
                 <div>
                   <h2>Sign up</h2>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  <b-button variant="primary" class="active mt-3">Register Now!</b-button>
+                  <b-button variant="primary" class="active mt-3" to="/register">Register Now!</b-button>
                 </div>
               </b-card-body>
             </b-card>
@@ -43,8 +44,37 @@
 </template>
 
 <script>
+import Notification from "../components/Notification";
 export default {
   name: 'Login',
-  layout: 'clean'
+  components: {Notification},
+  layout: 'clean',
+  middleware: 'guest',
+  data() {
+    return {
+      error: null,
+      user: {
+        email: '',
+        password: ''
+      }
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        await this.$auth.loginWith('local', {
+          data: {user: this.user}
+        })
+
+      } catch (e) {
+        if(e.response.data.error){
+          this.error = e.response.data.error;
+        }
+        else{
+          this.error = e.response.data.errors;
+        }
+      }
+    },
+  }
 }
 </script>

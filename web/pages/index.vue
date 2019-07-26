@@ -135,6 +135,7 @@ import MainChartExample from '~/components/dashboard/MainChartExample'
 
 export default {
   name: 'dashboard',
+  middleware: 'auth',
   components: {
     CardLine1ChartExample,
     CardLine2ChartExample,

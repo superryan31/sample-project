@@ -27,13 +27,8 @@
     },
     methods: {
       async logout() {
-        try {
-          this.$store.dispatch('logout').then(() => {
-            this.$router.push('/login')
-          })
-        } catch (e) {
-          this.formError = e.message
-        }
+        await this.$auth.logout();
+        this.$router.push('/login')
       }
     }
   }
