@@ -68,7 +68,7 @@ export default {
    ** Axios module configuration
    */
   axios: {
-    baseURL: 'http://localhost:8090'
+    baseURL: 'http://localhost:3000'
   },
 
   auth: {
