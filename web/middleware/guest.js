@@ -2,7 +2,7 @@ export default function ({
   store,
   redirect
 }) {
-  if (store.state.auth.loggedIn) {
+  if (store.getters.isLoggedIn) {
     return redirect('/')
   }
 }

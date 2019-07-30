@@ -37,25 +37,6 @@ export default {
   axios: {
     baseURL: 'http://localhost:3000'
   },
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {url: 'users/sign_in', method: 'post', propertyName: 'headers'},
-          user: {url: 'users/sign_in', method: 'get', propertyName: false},
-          logout: false
-        }
-      }
-    },
-    localStorage: {
-      prefix: 'auth.'
-    },
-    redirect: {
-      login: '/login',
-      logout: '/',
-      home: '/',
-    }
-  },
 
   /*
   ** Nuxt.js dev-modules
@@ -68,7 +49,6 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
     'nuxt-material-design-icons'
   ],
   /*
