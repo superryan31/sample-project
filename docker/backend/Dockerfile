@@ -13,7 +13,7 @@ RUN gem update --system
 RUN gem install bundler
 
 WORKDIR /app
-COPY backend/Gemfile ./
+COPY ./backend/Gemfile ./backend/Gemfile.lock ./
 RUN bundle install --jobs=4 --retry=3
 
 COPY ./backend .
