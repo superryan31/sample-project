@@ -1,0 +1,13 @@
+build:
+  docker:
+    backend: docker/backend/Dockerfile
+    web: docker/web/Dockerfile
+run:
+  backend: bundle exec puma -C backend/config/puma.rb
+  web: nuxt start
+release:
+  image: backend
+  command:
+    - bin/rails db:migrate &&
+      bin/rails db:seed &&
+      bin/rails db:example
