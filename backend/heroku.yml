@@ -1,0 +1,11 @@
+build:
+  docker:
+    web: ../docker/backend/Dockerfile
+run:
+  web: bundle exec puma -C config/puma.rb
+release:
+  image: web
+  command:
+    - rake db:migrate &&
+      rake db:create &&
+      rake db:migrate
