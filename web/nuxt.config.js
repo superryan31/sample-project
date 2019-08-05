@@ -2,6 +2,9 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   mode: 'spa',
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
   /*
   ** Headers of the page
   */
@@ -35,7 +38,7 @@ export default {
    ** Axios module configuration
    */
   axios: {
-    baseURL: 'http://localhost:3000'
+    baseURL: process.env.baseUrl
   },
 
   /*
