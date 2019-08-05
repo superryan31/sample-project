@@ -53,4 +53,4 @@ test:
   #database: backend_production
   
 production:
-  url: <%= ENV['CLEARDB_DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %>
