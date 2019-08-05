@@ -10,5 +10,4 @@ release:
   image: web
   command:
     - bin/rails db:migrate &&
-      bin/rails db:seed &&
-      bin/rails db:example
+      bin/rails db:seed
