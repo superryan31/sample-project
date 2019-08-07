@@ -112,15 +112,20 @@
             to: '/'
           },
           {
+            icon: 'settings',
+            title: '設定',
+            to: '/setting'
+          },
+          {
             icon: 'mdi-chart-bubble',
-            title: 'Inspire',
-            to: '/inspire'
+            title: 'Issues',
+            to: '/issues'
           }
         ],
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: 'Vuetify.js'
+        title: 'Agile Watcher'
       }
     },
     methods: {
