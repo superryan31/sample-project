@@ -2,6 +2,9 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   mode: 'spa',
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
   /*
   ** Headers of the page
   */
@@ -35,26 +38,7 @@ export default {
    ** Axios module configuration
    */
   axios: {
-    baseURL: 'http://localhost:3000'
-  },
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {url: 'users/sign_in', method: 'post', propertyName: 'headers'},
-          user: {url: 'users/sign_in', method: 'get', propertyName: false},
-          logout: false
-        }
-      }
-    },
-    localStorage: {
-      prefix: 'auth.'
-    },
-    redirect: {
-      login: '/login',
-      logout: '/',
-      home: '/',
-    }
+    baseURL: process.env.baseUrl
   },
 
   /*
@@ -68,7 +52,6 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
     'nuxt-material-design-icons'
   ],
   /*
