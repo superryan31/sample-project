@@ -7,4 +7,6 @@ class User < ApplicationRecord
 
   validates :email, :password, presence: true
 
+  # model association
+  has_many :project_settings, dependent: :destroy
 end
