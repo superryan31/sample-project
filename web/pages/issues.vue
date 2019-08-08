@@ -1,15 +1,6 @@
 <template>
       <v-layout>
         <v-flex>
-
-<!--          <blockquote class="blockquote">-->
-<!--            &#8220;First, solve the problem. Then, write the code.&#8221;-->
-<!--            <footer>-->
-<!--              <small>-->
-<!--                <em>&mdash;John Johnson</em>-->
-<!--              </small>-->
-<!--            </footer>-->
-<!--          </blockquote>-->
             <template>
                 <v-simple-table>
                     <thead>
@@ -62,7 +53,10 @@
     },
     methods: {
       getIssueList() {
-        this.$axios.get('issues').then(
+        let githubUrl = localStorage.getItem('githubUrl')
+        let githubAuthorizeToken = localStorage.getItem('githubAuthorizeToken')
+        let url = 'issues?github_token='+githubAuthorizeToken+'&github_repository='+githubUrl;
+        this.$axios.get(url).then(
           res => {
             console.log(res);
             if (res.data) {

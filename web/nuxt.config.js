@@ -3,7 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   mode: 'spa',
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    baseUrl: process.env.BASE_URL || 'http://localhost:3333',
+    outhPublicKey: process.env.OUTH_PUBLIC_KEY || 'U7b2Lod73jq9f5NFpIw7Oz7gaw4'
   },
   /*
   ** Headers of the page
