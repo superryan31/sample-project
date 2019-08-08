@@ -1,5 +1,5 @@
 <template>
-    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="saveSetting()">
+    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="save()">
         <v-layout align-center justify-center>
 
             <v-flex xs12 sm8 md6 lg4>
@@ -17,14 +17,14 @@
                         >
                             <template v-slot:activator="{ on }">
                                 <v-text-field
-                                        v-model="projectStartDate"
+                                        v-model="setting.project_start_date"
                                         label="プロジェクト開始日"
                                         prepend-icon="event"
                                         readonly
                                         v-on="on"
                                 ></v-text-field>
                             </template>
-                            <v-date-picker v-model="projectStartDate"></v-date-picker>
+                            <v-date-picker v-model="setting.project_start_date"></v-date-picker>
                         </v-menu>
 
                         <v-text-field
@@ -32,7 +32,7 @@
                                 label="GitHub Authorize Token"
                                 id="githubAuthorizeToken"
                                 type="githubAuthorizeToken"
-                                v-model="githubAuthorizeToken" readonly
+                                v-model="setting.github_token" readonly
                                 :rules="rules.githubAuthorizeTokenRules">
                         </v-text-field>
                         <v-btn small tile outlined @click="getGitHubToken()">
@@ -44,7 +44,7 @@
                                 label="対象Github URL"
                                 id="githubUrl"
                                 type="githubUrl"
-                                v-model="githubUrl"
+                                v-model="setting.github_repository"
                                 :rules="rules.githubUrlRules">
                         </v-text-field>
 
@@ -71,34 +71,59 @@
     data: () => ({
       loading: false,
       responseError: '',
-      projectStartDate: new Date().toISOString().substr(0, 10),
+      setting: {
+        github_token: '',
+        github_repository: '',
+        project_start_date: new Date().toISOString().substr(0, 10)
+      },
       menu: false,
-      githubUrl: '',
-      githubAuthorizeToken: '',
       valid: true,
       rules: new SettingRules()
     }),
     created() {
       OAuth.initialize(process.env.outhPublicKey)
+      this.getExistingSetting()
     },
     methods: {
       getGitHubToken() {
         OAuth.popup('github')
           .done(res => {
             console.log(res.access_token)
-            this.githubAuthorizeToken = res.access_token
+            this.setting.github_token = res.access_token
           })
           .fail(err => {
             //todo when the OAuth flow failed
           })
       },
-      saveSetting() {
+      getExistingSetting(){
+        this.$axios.get('user-project-setting').then(
+          res => {
+            console.log(res);
+            if (res.data) {
+              this.setting = res.data;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+      },
+      async save() {
         if (!this.$refs.form.validate()) {
           return
         }
-        localStorage.setItem('githubAuthorizeToken', this.githubAuthorizeToken)
-        localStorage.setItem('githubUrl', this.githubUrl)
-        this.$router.push('/issues')
+        this.loading = true
+        this.$store.dispatch('saveSetting', this.setting)
+          .then(() => this.$router.push('/'))
+          .catch(err => {
+            if (err.response.data.error) {
+              this.responseError = err.response.data.error
+            } else {
+              this.responseError = err.response.data.errors
+            }
+          })
+          .finally(() => this.loading = false)
+
       }
 
     }

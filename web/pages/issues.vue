@@ -33,7 +33,7 @@
 </template>
 <script>
   export default {
-    middleware: 'auth',
+    middleware: 'local_and_github_auth',
     data() {
       return {
         issueList: [],

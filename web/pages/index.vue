@@ -84,7 +84,7 @@ import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
 
 export default {
-  middleware: 'auth',
+  middleware: 'local_and_github_auth',
   components: {
     Logo,
     VuetifyLogo
