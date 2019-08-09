@@ -86,6 +86,14 @@ export const actions = {
         })
     })
   },
+  saveGitHubInfo({ commit }, setting) {
+    return new Promise((resolve, reject) => {
+      localStorage.setItem('github_token', setting.github_token)
+      localStorage.setItem('github_repository', setting.github_repository)
+      commit('setting_success', setting.github_token, setting.github_repository)
+      resolve()
+    })
+  },
   clearSetting({ commit }) {
     return new Promise((resolve, reject) => {
       commit('setting_clear')

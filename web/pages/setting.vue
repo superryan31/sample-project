@@ -101,6 +101,7 @@
             console.log(res);
             if (res.data) {
               this.setting = res.data;
+              this.$store.dispatch('saveGitHubInfo', this.setting)
             }
           })
           .catch(err => {
