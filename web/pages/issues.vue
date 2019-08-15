@@ -14,26 +14,25 @@
                             :key="n"
                             class="pa-3"> <!--  tab details-->
                         <v-row>
-                            <v-col md="4"  v-for="n in 5"
-                                   :key="n">
+                            <v-col md="4"  v-for="(assignee, index) in assignees" :key="index">
                                 <v-avatar
                                         tile
-                                        size="60"
-                                >
-                                    <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
+                                        size="60">
+
+                                    <img :src="assignee.avatar_url" alt="avatar">
 
                                 </v-avatar>
-                                岩本稜平
+                                {{assignee.login}}
                                 <v-row>
-                                    <v-col v-for="i in 3"
-                                           :key="i">
+                                    <v-col v-for="(issue, index) in assignee.issueList"
+                                           :key="index">
                                         <v-card
                                                 class="mx-auto"
                                                 outlined>
 
                                             <v-list-item>
                                                 <v-list-item-content>
-                                                    <v-list-item-title> スプリント会議の開催 this is long contentスプリント会議の開催 this is long content</v-list-item-title>
+                                                    <v-list-item-title> {{issue.title}}</v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-avatar color="primary" class="ml-1 mb-1" size="20">
                                                     <span class="caption">3</span>
@@ -50,9 +49,9 @@
                                                 <v-chip x-small color="#0075ca" class="ma-1">
                                                     documentation
                                                 </v-chip>
-<!--                                                <v-chip class="ma-1" x-small color="#008672">-->
-<!--                                                    help wanted-->
-<!--                                                </v-chip>-->
+                                                <!--                                                <v-chip class="ma-1" x-small color="#008672">-->
+                                                <!--                                                    help wanted-->
+                                                <!--                                                </v-chip>-->
                                             </div>
 
                                         </v-card>
@@ -73,43 +72,45 @@
   import { githubService } from '../services/GitHubService'
 
   export default {
-    middleware: 'auth',
+    middleware: 'local_and_github_auth',
     data() {
       return {
         issueList: [],
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237
-          }]
+        assignees: [],
+        github_token: this.$store.getters.github_token,
+        github_repository: this.$store.getters.github_repository
       }
     },
     created() {
-      this.getIssueList()
+      // this.getIssueList()
+      this.getAllAssignee()
     },
     methods: {
       getIssueList() {
-        let github_token = this.$store.getters.github_token
-        let github_repository = this.$store.getters.github_repository
-        let url = 'issues?github_token=' + github_token + '&github_repository=' + github_repository
-        this.$axios.get(url).then(
-          res => {
-            console.log(res);
-            if (res.data) {
-              this.issueList = res.data;
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-
-        githubService.getIssues(github_repository)
+        githubService.getIssues(this.github_repository)
           .then(response => {
-            console.log(response)
+            let issueList = response.data;
+            for(let assign in this.assignees){
+              let issueListForEachAssignee = [];
+              for(let issue in issueList){
+                for(let innerAssignee in issue.assignees){
+                  console.log('here')
+                  if(assign.login == innerAssignee.login){
+                    issueListForEachAssignee.push(issue);
+                    assign.issueList = issueListForEachAssignee;
+                    break;
+                  }
+                }
+              }
+            }
+            console.log(this.assignees)
+          })
+      },
+      getAllAssignee() {
+        githubService.getAssignees(this.github_repository)
+          .then(response => {
+            this.assignees = response.data
+            this.getIssueList();
           })
       }
 
