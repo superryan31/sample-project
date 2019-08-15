@@ -1,6 +1,6 @@
 <template>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="save()">
-        <v-layout align-center justify-center>
+        <v-layout align-center justify-center class="mt-5">
 
             <v-flex xs12 sm8 md6 lg4>
                 <v-card class="elevation-1 pa-3">
@@ -38,13 +38,14 @@
                         <v-btn small tile outlined @click="getGitHubToken()">
                             <v-icon left>mdi-github-circle</v-icon>
                             Get GitHub Token
-                        </v-btn>
+                        </v-btn> <br><br>
                         <v-text-field
                                 name="githubUrl"
                                 label="対象Github URL"
                                 id="githubUrl"
                                 type="githubUrl"
                                 v-model="setting.github_repository"
+                                placeholder="eg.owner/repository"
                                 :rules="rules.githubUrlRules">
                         </v-text-field>
 

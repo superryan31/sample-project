@@ -1,12 +1,12 @@
 <template>
-    <v-layout>
+    <v-layout class="mt-5">
         <v-flex>
             <template>
                 <v-tabs grow color="primary">
-                    <v-tab>
+                    <v-tab @click="getIssueList('one_month')">
                         1 Month
                     </v-tab>
-                    <v-tab>
+                    <v-tab @click="getIssueList('so_far')">
                         So Far
                     </v-tab>
                     <v-tab-item
@@ -14,18 +14,20 @@
                             :key="n"
                             class="pa-3"> <!--  tab details-->
                         <v-row>
-                            <v-col md="4"  v-for="(assignee, index) in assignees" :key="index">
+                            <v-col v-if="assignees.length <= 0">
+                                <p class="text-center"> There is no closed issues.</p>
+                            </v-col>
+                            <v-col md="4" v-for="(assignee, index) in assignees" :key="index">
                                 <v-avatar
                                         tile
                                         size="60">
-
                                     <img :src="assignee.avatar_url" alt="avatar">
 
                                 </v-avatar>
                                 {{assignee.login}}
                                 <v-row>
-                                    <v-col v-for="(issue, index) in assignee.issueList"
-                                           :key="index">
+                                    <v-col v-for="(issue, ind) in assignee.issueList"
+                                           :key="ind">
                                         <v-card
                                                 class="mx-auto"
                                                 outlined>
@@ -35,24 +37,14 @@
                                                     <v-list-item-title> {{issue.title}}</v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-avatar color="primary" class="ml-1 mb-1" size="20">
-                                                    <span class="caption">3</span>
+                                                    <span class="caption">{{getPointFromTitle(issue.title)}}</span>
                                                 </v-avatar>
                                             </v-list-item>
 
-                                            <div class="text-left">
-                                                <v-chip x-small color="#d73a4a" class="ma-1">
-                                                    bug
-                                                </v-chip>
-                                                <v-chip x-small>
-                                                    duplicate
-                                                </v-chip>
-                                                <v-chip x-small color="#0075ca" class="ma-1">
-                                                    documentation
-                                                </v-chip>
-                                                <!--                                                <v-chip class="ma-1" x-small color="#008672">-->
-                                                <!--                                                    help wanted-->
-                                                <!--                                                </v-chip>-->
-                                            </div>
+                                            <v-chip v-for="(label, labelInd) in issue.labels" :key="labelInd" x-small
+                                                    :color="'#' + label.color" class="ma-1">
+                                                {{label.name}}
+                                            </v-chip>
 
                                         </v-card>
                                     </v-col>
@@ -75,43 +67,53 @@
     middleware: 'local_and_github_auth',
     data() {
       return {
-        issueList: [],
         assignees: [],
         github_token: this.$store.getters.github_token,
         github_repository: this.$store.getters.github_repository
       }
     },
     created() {
-      // this.getIssueList()
-      this.getAllAssignee()
+      this.getIssueList('one_month')
     },
     methods: {
-      getIssueList() {
-        githubService.getIssues(this.github_repository)
+      setAssigneeAndIssue(tempAssignee, issue) {
+        let isContain = false
+        for (let assignee of this.assignees) {
+          if (assignee.login == tempAssignee.login) {
+            isContain = true
+            assignee.issueList.push(issue)
+            break
+          }
+        }
+        if (!isContain) {
+          tempAssignee.issueList = []
+          tempAssignee.issueList.push(issue)
+          this.assignees.push(tempAssignee)
+        }
+
+      },
+      getIssueList(timer) {
+        githubService.getIssues(this.github_repository, timer)
           .then(response => {
-            let issueList = response.data;
-            for(let assign in this.assignees){
-              let issueListForEachAssignee = [];
-              for(let issue in issueList){
-                for(let innerAssignee in issue.assignees){
-                  console.log('here')
-                  if(assign.login == innerAssignee.login){
-                    issueListForEachAssignee.push(issue);
-                    assign.issueList = issueListForEachAssignee;
-                    break;
-                  }
-                }
+            this.assignees = [];
+            let issueList = response.data.items
+            for (let issue of issueList) {
+              // set assignee
+              for (let tempAssignee of issue.assignees) {
+                this.setAssigneeAndIssue(tempAssignee, issue)
               }
             }
-            console.log(this.assignees)
           })
       },
-      getAllAssignee() {
-        githubService.getAssignees(this.github_repository)
-          .then(response => {
-            this.assignees = response.data
-            this.getIssueList();
-          })
+      getPointFromTitle(title){
+        let tempList = title.match(/"[0-9]{1,2}"/g);
+        console.log(tempList)
+        if(tempList.length > 0){
+          return tempList[tempList.length -1].replace(/["]+/g,""); // get last index
+        }
+        else{
+          return 0;
+        }
       }
 
     }

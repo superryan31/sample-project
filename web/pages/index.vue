@@ -1,5 +1,5 @@
 <template>
-    <v-layout>
+    <v-layout class="mt-5">
         <v-row>
             <v-col md="4" class="mt-10">
                 <v-card
