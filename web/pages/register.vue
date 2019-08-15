@@ -14,7 +14,7 @@
                                     </div>
                                     <span class="red--text" v-if="responseError">{{responseError}}</span>
                                     <v-text-field
-                                            prepend-icon="email"
+                                            prepend-icon="mdi-at"
                                             ref="email"
                                             name="email"
                                             label="Email"

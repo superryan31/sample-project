@@ -14,6 +14,14 @@ export function RegisterationRules() {
   };
 }
 
+/* Validation Rules For Setting Form */
+export function SettingRules() {
+  return {
+    githubUrlRules: githubUrlRules,
+    githubAuthorizeTokenRules: githubAuthorizeTokenRules
+  };
+}
+
 let emailRules = [v => !!v || "Email is required",
  v => {
   const pattern = /^[\w-_\.+]*[\w-_\.]\@([\w]+\.)+[\w]+[\w]$/;
@@ -26,3 +34,11 @@ let passwordRules = [
   v =>
     (v && v.length > 6) || "Password length must be greater than 6 characters"
 ];
+
+let githubUrlRules = [
+  v => !!v || "GitHub URL is required"
+]
+
+let githubAuthorizeTokenRules = [
+  v => !!v || "GitHub authorize token is required"
+]
