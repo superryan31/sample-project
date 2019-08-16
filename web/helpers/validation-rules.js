@@ -36,7 +36,7 @@ let passwordRules = [
 ];
 
 let githubUrlRules = [
-  v => !!v || "GitHub URL is required"
+  v => !!v || "GitHub Path is required"
 ]
 
 let githubAuthorizeTokenRules = [

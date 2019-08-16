@@ -2,13 +2,17 @@ import github_axios from './github_axios'
 
 export const githubService = {
   getAssignees,
-  getIssues
+  getIssues,
+  getRepository
 }
 
 function getAssignees(repo_name) {
   return github_axios.get('/repos/' + repo_name + '/assignees')
 }
 
+function getRepository(repo_name) {
+  return github_axios.get('/repos/' + repo_name)
+}
 
 function getIssues(repo_name, timer) {
   // for one month issue

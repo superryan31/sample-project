@@ -35,9 +35,9 @@
 
                                             <v-list-item>
                                                 <v-list-item-content>
-                                                    <v-list-item-title> {{issue.title}}</v-list-item-title>
+                                                    <v-list-item-title> {{prepareTitle(issue.title)}}</v-list-item-title>
                                                 </v-list-item-content>
-                                                <v-avatar color="primary" class="ml-1 mb-1" size="20">
+                                                <v-avatar color="primary" class="ml-1 mb-1" size="20" v-if="getPointFromTitle(issue.title) != 0">
                                                     <span class="caption">{{getPointFromTitle(issue.title)}}</span>
                                                 </v-avatar>
                                             </v-list-item>
@@ -110,10 +110,23 @@
             }
           })
       },
+      prepareTitle(title){
+        let tempList = title.match(/"[0-9]{1,2}"/g);
+        if(tempList != null && tempList.length > 0){
+          let result = title.replace(tempList[tempList.length -1],"")
+          return result;
+        }
+        else{
+          return title;
+        }
+      },
       getPointFromTitle(title){
         let tempList = title.match(/"[0-9]{1,2}"/g);
         console.log(tempList)
         if(tempList != null && tempList.length > 0){
+          let result = title.replace(tempList[tempList.length -1],"")
+          title = result;
+          console.log(result)
           return tempList[tempList.length -1].replace(/["]+/g,""); // get last index
         }
         else{
