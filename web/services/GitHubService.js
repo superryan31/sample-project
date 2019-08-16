@@ -16,7 +16,7 @@ function getIssues(repo_name, timer) {
   currentDate.setMonth(currentDate.getMonth() - 1)
 
   let dateStr = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth()+1)).slice(-2)  + '-' + ('0' + currentDate.getDate()).slice(-2)
-  let url = '/search/issues?q=repo:' + repo_name + '+state:closed'
+  let url = '/search/issues?q=repo:' + repo_name + '+state:closed+type:issue'
   if (timer == 'one_month') {
     url += '+closed:>=' + dateStr
   } else {

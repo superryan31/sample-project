@@ -21,7 +21,8 @@
                                 <v-avatar
                                         tile
                                         size="60">
-                                    <img :src="assignee.avatar_url" alt="avatar">
+                                    <img v-if="assignee.login != 'No One Assign'" :src="assignee.avatar_url" alt="avatar">
+                                    <img v-if="assignee.login == 'No One Assign'" src="@/assets/no-assignee.jpg" alt="avatar">
 
                                 </v-avatar>
                                 {{assignee.login}}
@@ -98,6 +99,10 @@
             this.assignees = [];
             let issueList = response.data.items
             for (let issue of issueList) {
+              if(issue.assignees.length <= 0){
+                let temp = {login:'No One Assign'}
+                this.setAssigneeAndIssue(temp, issue)
+              }
               // set assignee
               for (let tempAssignee of issue.assignees) {
                 this.setAssigneeAndIssue(tempAssignee, issue)
@@ -108,7 +113,7 @@
       getPointFromTitle(title){
         let tempList = title.match(/"[0-9]{1,2}"/g);
         console.log(tempList)
-        if(tempList.length > 0){
+        if(tempList != null && tempList.length > 0){
           return tempList[tempList.length -1].replace(/["]+/g,""); // get last index
         }
         else{
