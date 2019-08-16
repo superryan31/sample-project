@@ -24,9 +24,10 @@ export const mutations = {
     state.token = ''
   },
 
-  setting_success(state, github_token, github_repository) {
-    state.github_token = github_token
-    state.github_repository = github_repository
+  setting_success(state, setting) {
+    console.log(setting)
+    state.github_token = setting.github_token
+    state.github_repository = setting.github_repository
   },
   setting_clear(state) {
     state.github_token = ''
@@ -76,7 +77,7 @@ export const actions = {
         .then(resp => {
           localStorage.setItem('github_token', setting.github_token)
           localStorage.setItem('github_repository', setting.github_repository)
-          commit('setting_success', setting.github_token, setting.github_repository)
+          commit('setting_success', setting)
           resolve(resp)
         })
         .catch(err => {
@@ -88,9 +89,10 @@ export const actions = {
   },
   saveGitHubInfo({ commit }, setting) {
     return new Promise((resolve, reject) => {
+      console.log('store');
       localStorage.setItem('github_token', setting.github_token)
       localStorage.setItem('github_repository', setting.github_repository)
-      commit('setting_success', setting.github_token, setting.github_repository)
+      commit('setting_success', setting)
       resolve()
     })
   },

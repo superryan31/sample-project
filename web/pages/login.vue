@@ -74,7 +74,9 @@
         }
         this.loading = true
         this.$store.dispatch('login', { user: this.user })
-          .then(() => this.$router.push('/'))
+          .then(() => {
+            this.$router.push('/')
+          })
           .catch(err => {
             if (err.response.data.error) {
               this.responseError = err.response.data.error
@@ -82,7 +84,20 @@
               this.responseError = err.response.data.errors
             }
           })
-          .finally(() => this.loading = false)
+          .finally(() => {
+            this.$axios.get('user-project-setting').then(
+              res => {
+                console.log(res);
+                if (res.data) {
+                  this.setting = res.data;
+                  this.$store.dispatch('saveGitHubInfo', this.setting)
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            this.loading = false
+          })
 
       }
     }

@@ -1,6 +1,6 @@
 <template>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="save()">
-        <v-layout align-center justify-center>
+        <v-layout align-center justify-center class="mt-5">
 
             <v-flex xs12 sm8 md6 lg4>
                 <v-card class="elevation-1 pa-3">
@@ -38,20 +38,21 @@
                         <v-btn small tile outlined @click="getGitHubToken()">
                             <v-icon left>mdi-github-circle</v-icon>
                             Get GitHub Token
-                        </v-btn>
+                        </v-btn> <br><br>
                         <v-text-field
                                 name="githubUrl"
-                                label="対象Github URL"
+                                label="Github Path"
                                 id="githubUrl"
                                 type="githubUrl"
                                 v-model="setting.github_repository"
+                                placeholder="eg. owner/repository"
                                 :rules="rules.githubUrlRules">
                         </v-text-field>
 
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn align="right" type="submit" color="primary" :disabled="!valid">
+                        <v-btn align="right" type="submit" color="primary" :disabled="!valid" :loading="loading">
                             登録
                         </v-btn>
                     </v-card-actions>
@@ -64,6 +65,7 @@
 <script>
   import { RegisterationRules, SettingRules } from '../helpers/validation-rules'
   import { OAuth } from 'oauthio-web'
+  import {githubService} from '../services/GitHubService'
 
   export default {
     middleware: 'auth',
@@ -114,16 +116,30 @@
           return
         }
         this.loading = true
-        this.$store.dispatch('saveSetting', this.setting)
-          .then(() => this.$router.push('/'))
+
+        // check repository
+        githubService.getRepository(this.setting.github_repository)
+          .then(response => {
+            console.log(response)
+            this.$store.dispatch('saveSetting', this.setting)
+              .then(() => this.$router.push('/'))
+              .catch(err => {
+                if (err.response.data.error) {
+                  this.responseError = err.response.data.error
+                } else {
+                  this.responseError = err.response.data.errors
+                }
+              })
+          })
           .catch(err => {
-            if (err.response.data.error) {
-              this.responseError = err.response.data.error
-            } else {
-              this.responseError = err.response.data.errors
+            if(err.response.data && err.response.data.message && err.response.data.message == 'Not Found'){
+              this.responseError = 'Invalid github path'
             }
+
           })
           .finally(() => this.loading = false)
+
+
 
       }
 

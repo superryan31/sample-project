@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   mode: 'spa',
   env: {
+    githubBaseUrl: process.env.GITHUB_BASE_URL || 'https://api.github.com/',
     baseUrl: process.env.BASE_URL || 'http://localhost:3333',
     outhPublicKey: process.env.OUTH_PUBLIC_KEY || 'U7b2Lod73jq9f5NFpIw7Oz7gaw4'
   },
@@ -33,14 +34,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/axios',
+    '~/plugins/axios'
   ],
-  /*
-   ** Axios module configuration
-   */
-  axios: {
-    baseURL: process.env.baseUrl
-  },
 
   /*
   ** Nuxt.js dev-modules
@@ -62,7 +57,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
